@@ -8,7 +8,6 @@ class SaleItemFactory extends Factory
 {
     public function definition(): array
     {
-
         $product = \App\Models\Product::all()->random();
         $productPrice = $product->price;
         $quantity = fake()->numberBetween(1, 10);

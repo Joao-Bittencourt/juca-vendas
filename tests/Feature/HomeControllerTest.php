@@ -16,6 +16,5 @@ class HomeControllerTest extends TestCase
 
         $response->assertViewIs('home');
         $response->assertStatus(200);
-
     }
 }

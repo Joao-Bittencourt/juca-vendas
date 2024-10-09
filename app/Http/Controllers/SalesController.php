@@ -40,7 +40,6 @@ class SalesController extends Controller
 
     public function store(SaleRequest $request)
     {
-
         $request->validated();
 
         $sale = new Sale();
@@ -62,7 +61,6 @@ class SalesController extends Controller
 
         $installments = $request->installments;
         foreach ($installments as $key => $installment) {
-
             $installmentAmount = str_replace('R$ ', '', $installment['amount']);
             $installmentAmount = str_replace(',', '.', $installmentAmount);
 

@@ -12,7 +12,7 @@ class CustomerRequest extends FormRequest
         return [
             'name' => ['required'],
             'email' => ['required', 'email'],
-            'customer_type' => ['required', 'in:'.implode(',', array_flip((new Customer())->getCustomerTypes()))],
+            'customer_type' => ['required', 'in:' . implode(',', array_flip((new Customer())->getCustomerTypes()))],
             'cpf' => ['nullable', 'string'],
             'birth_date' => ['nullable', 'string'],
             'cnpj' => ['nullable', 'string'],

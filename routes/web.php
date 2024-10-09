@@ -29,7 +29,6 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'authorization'])->group(function () {
-
     Route::get('/home', [HomeController::class, 'index'])->name('home.index');
 
     Route::get('/brands', [BrandsController::class, 'index'])->name('brands.index');

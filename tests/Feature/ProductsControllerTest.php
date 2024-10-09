@@ -76,7 +76,6 @@ class ProductsControllerTest extends TestCase
 
     public function test_update_products_post_success(): void
     {
-
         $loggedUser =  $this->loggedUser;
         $product = Product::factory()->create();
         $brand = Brand::factory()->create();
@@ -102,7 +101,6 @@ class ProductsControllerTest extends TestCase
 
     public function test_deactive_products_get_success(): void
     {
-
         $loggedUser =  $this->loggedUser;
         $product = Product::factory()->create();
         $this->actingAs($loggedUser);
@@ -120,7 +118,6 @@ class ProductsControllerTest extends TestCase
 
     public function test_active_products_get_success(): void
     {
-
         $loggedUser =  $this->loggedUser;
         $product = Product::factory()->create(['active' => 0]);
         $this->actingAs($loggedUser);

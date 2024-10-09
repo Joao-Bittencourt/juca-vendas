@@ -30,7 +30,6 @@ class BrandsController extends Controller
 
     public function edit(Brand $brand)
     {
-
         return view('brand.edit', [
             'brand' => $brand
         ]);
@@ -38,7 +37,6 @@ class BrandsController extends Controller
 
     public function update(BrandRequest $request, Brand $brand)
     {
-
         $brand->update($request->validated());
 
         return redirect()

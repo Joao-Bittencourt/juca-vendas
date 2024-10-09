@@ -38,7 +38,6 @@ class BrandsControllerTest extends TestCase
 
     public function test_store_brands_post_success(): void
     {
-
         $loggedUser =  $this->loggedUser;
         $this->actingAs($loggedUser);
 
@@ -67,7 +66,6 @@ class BrandsControllerTest extends TestCase
 
     public function test_update_brands_post_success(): void
     {
-
         $loggedUser =  $this->loggedUser;
         $brand = Brand::factory()->create();
 
@@ -84,7 +82,6 @@ class BrandsControllerTest extends TestCase
 
     public function test_active_brands_get_success(): void
     {
-
         $loggedUser =  $this->loggedUser;
         $this->actingAs($loggedUser);
         $brand = Brand::factory()->create(['active' => 0]);

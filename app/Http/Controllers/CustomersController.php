@@ -18,7 +18,6 @@ class CustomersController extends Controller
 
     public function create()
     {
-
         return view('customer.create', [
             'customerTypes' => (new Customer())->getCustomerTypes(),
         ]);
@@ -26,11 +25,9 @@ class CustomersController extends Controller
 
     public function store(CustomerRequest $request)
     {
-
         $customer = new Customer($request->validated());
 
         if ($customer->customer_type == 'N') {
-
             $customerType = new NaturalPerson();
             $customerType->cpf = $request->cpf;
             $customerType->birth_date = $request->birth_date;
@@ -53,7 +50,6 @@ class CustomersController extends Controller
 
     public function edit(Customer $customer)
     {
-
         return view('customer.edit', [
             'customer' => $customer,
             'customerTypes' => (new Customer())->getCustomerTypes(),
@@ -62,9 +58,7 @@ class CustomersController extends Controller
 
     public function update(CustomerRequest $request, Customer $customer)
     {
-
         if ($request->customer_type == 'N') {
-
             $customerType['cpf'] = $request->cpf ?? null;
             $customerType['birth_date'] = $request->birth_date ?? null;
             $modelRelated = 'natural_person';

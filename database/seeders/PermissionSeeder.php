@@ -79,7 +79,6 @@ class PermissionSeeder extends Seeder
 
     protected function createPermissions(): void
     {
-
         Permission::firstOrCreate(['name' => PermissionEnum::HOME_INDEX]);
 
         Permission::firstOrCreate(['name' => PermissionEnum::PRODUCTS_INDEX]);
@@ -147,6 +146,5 @@ class PermissionSeeder extends Seeder
         Permission::firstOrCreate(['name' => PermissionEnum::PERMISSIONS_STORE]);
         Permission::firstOrCreate(['name' => PermissionEnum::PERMISSIONS_EDIT]);
         Permission::firstOrCreate(['name' => PermissionEnum::PERMISSIONS_UPDATE]);
-
     }
 }

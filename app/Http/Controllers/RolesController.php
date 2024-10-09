@@ -87,5 +87,4 @@ class RolesController extends Controller
             ->route('roles.index')
             ->with(['alert-success' => __('Data saved successfully!')]);
     }
-
 }

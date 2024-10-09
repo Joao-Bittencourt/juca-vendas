@@ -16,7 +16,6 @@ class Authorization
      */
     public function handle(Request $request, Closure $next): Response
     {
-
         if (auth()->user()) {
             $routeName = $request->route()->getName();
 

@@ -35,8 +35,6 @@ class TransactionsController extends Controller
 
         $installments = $requestValidated['installments'];
         foreach ($installments as $key => $installment) {
-
-
             $installmentAmount = str_replace('R$ ', '', $installment['amount']);
             $installmentAmount = str_replace(',', '.', $installmentAmount);
 
@@ -57,7 +55,6 @@ class TransactionsController extends Controller
 
     public function edit(Transaction $transaction)
     {
-
         return view('transaction.edit', [
             'transaction' => $transaction
         ]);
@@ -65,7 +62,6 @@ class TransactionsController extends Controller
 
     public function update(TransactionRequest $request, Transaction $transaction)
     {
-
         $transaction->update($request->validated());
 
         return redirect()

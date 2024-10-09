@@ -38,7 +38,6 @@ class PaymentMethodsControllerTest extends TestCase
 
     public function test_store_payment_methods_post_success(): void
     {
-
         $loggedUser =  $this->loggedUser;
         $this->actingAs($loggedUser);
 
@@ -75,7 +74,6 @@ class PaymentMethodsControllerTest extends TestCase
 
     public function test_update_payment_methods_post_success(): void
     {
-
         $loggedUser =  $this->loggedUser;
         $paymentMethod = PaymentMethod::factory()->create();
 
@@ -99,7 +97,6 @@ class PaymentMethodsControllerTest extends TestCase
 
     public function test_active_payment_methods_get_success(): void
     {
-
         $loggedUser =  $this->loggedUser;
         $this->actingAs($loggedUser);
         $paymentMethod = PaymentMethod::factory()->create(['active' => 0]);

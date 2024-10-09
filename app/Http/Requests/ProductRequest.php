@@ -8,7 +8,6 @@ class ProductRequest extends FormRequest
 {
     public function rules(): array
     {
-
         return [
             'brand_id' => ['required', 'numeric'],
             // @ToDo: revisar como fazer esta validação quando estiver fazendo update

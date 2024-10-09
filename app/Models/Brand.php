@@ -20,7 +20,6 @@ class Brand extends BaseModel
     }
     public function getActions(): array
     {
-
         $actions = [
             [
                 'title' => __('Edit'),

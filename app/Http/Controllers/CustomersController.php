@@ -79,7 +79,7 @@ class CustomersController extends Controller
 
     public function activeDeactive(Customer $customer)
     {
-        $customer->active = ! $customer->active;
+        $customer->active = !$customer->active;
         $customer->save();
 
         return redirect()

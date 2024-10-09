@@ -46,7 +46,7 @@ class PaymentMethodsController extends Controller
 
     public function activeDeactive(PaymentMethod $paymentMethod)
     {
-        $paymentMethod->active = ! $paymentMethod->active;
+        $paymentMethod->active = !$paymentMethod->active;
         $paymentMethod->save();
 
         return redirect()

@@ -1,25 +1,14 @@
 <?php
 
-namespace Tests\Unit\Models;
-
 use App\Models\JuridicalPerson;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Tests\TestCase;
 
-class JuridicalPersonTest extends TestCase
-{
-    public function test_juridical_person_belongs_to_customer(): void
-    {
-        $juridicalPerson = new JuridicalPerson();
-        $this->assertInstanceOf(
-            BelongsTo::class,
-            $juridicalPerson->customer()
-        );
-    }
+test('juridical person belongs to customer', function () {
+    $juridicalPerson = new JuridicalPerson();
+    expect($juridicalPerson->customer())->toBeInstanceOf(BelongsTo::class);
+});
 
-    public function test_juridical_person_get_actions(): void
-    {
-        $juridicalPerson = (new JuridicalPerson())->factory()->create();
-        $this->assertIsArray($juridicalPerson->getActions());
-    }
-}
+test('juridical person get actions', function () {
+    $juridicalPerson = (new JuridicalPerson())->factory()->create();
+    expect($juridicalPerson->getActions())->toBeArray();
+});

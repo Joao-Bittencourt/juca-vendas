@@ -1,35 +1,19 @@
 <?php
 
-namespace Tests\Feature\api;
-
 use App\Models\Product;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 
-class ProductControllerTest extends TestCase
-{
-    use WithFaker;
+uses(\Illuminate\Foundation\Testing\WithFaker::class);
 
+test('get list products success', function () {
+    $loggedUser =  $this->loggedUser;
 
+    $product = Product::factory()->create();
 
-    public function test_get_list_products_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
+    $response = $this
+        ->actingAs($loggedUser)
+        ->get(route('api.products.list') . '?q=' . $product->name);
 
-        $product = Product::factory()->create();
-
-        $response = $this
-            ->actingAs($loggedUser)
-            ->get(route('api.products.list') . '?q=' . $product->name);
-
-        $this->assertEquals(200, $response->status());
-        $this->assertEquals(
-            $product->name,
-            $response->json()[0]['name']
-        );
-        $this->assertEquals(
-            $product->id,
-            $response->json()[0]['id']
-        );
-    }
-}
+    expect($response->status())->toEqual(200);
+    expect($response->json()[0]['name'])->toEqual($product->name);
+    expect($response->json()[0]['id'])->toEqual($product->id);
+});

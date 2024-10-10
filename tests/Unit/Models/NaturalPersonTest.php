@@ -1,25 +1,14 @@
 <?php
 
-namespace Tests\Unit\Models;
-
 use App\Models\NaturalPerson;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Tests\TestCase;
 
-class NaturalPersonTest extends TestCase
-{
-    public function test_natural_person_belongs_to_customer(): void
-    {
-        $naturalPerson = new NaturalPerson();
-        $this->assertInstanceOf(
-            BelongsTo::class,
-            $naturalPerson->customer()
-        );
-    }
+test('natural person belongs to customer', function () {
+    $naturalPerson = new NaturalPerson();
+    expect($naturalPerson->customer())->toBeInstanceOf(BelongsTo::class);
+});
 
-    public function test_natural_person_get_actions(): void
-    {
-        $naturalPerson = (new NaturalPerson())->factory()->create();
-        $this->assertIsArray($naturalPerson->getActions());
-    }
-}
+test('natural person get actions', function () {
+    $naturalPerson = (new NaturalPerson())->factory()->create();
+    expect($naturalPerson->getActions())->toBeArray();
+});

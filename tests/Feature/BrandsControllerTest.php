@@ -1,98 +1,83 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\Brand;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 
-class BrandsControllerTest extends TestCase
-{
-    use WithFaker;
+uses(\Illuminate\Foundation\Testing\WithFaker::class);
 
+test('list brands get request success', function () {
+    $loggedUser =  $this->loggedUser;
 
+    $response = $this
+        ->actingAs($loggedUser)
+        ->get(route('brands.index'));
 
-    public function test_list_brands_get_request_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
+    $response->assertViewIs('brand.index');
+    $response->assertStatus(200);
+});
 
-        $response = $this
-            ->actingAs($loggedUser)
-            ->get(route('brands.index'));
+test('create brands get request success', function () {
+    $loggedUser =  $this->loggedUser;
 
-        $response->assertViewIs('brand.index');
-        $response->assertStatus(200);
-    }
+    $response = $this
+        ->actingAs($loggedUser)
+        ->get(route('brands.create'));
 
-    public function test_create_brands_get_request_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
+    $response->assertViewIs('brand.create');
+    $response->assertStatus(200);
+});
 
-        $response = $this
-            ->actingAs($loggedUser)
-            ->get(route('brands.create'));
+test('store brands post success', function () {
+    $loggedUser =  $this->loggedUser;
+    $this->actingAs($loggedUser);
 
-        $response->assertViewIs('brand.create');
-        $response->assertStatus(200);
-    }
+    $name = $this->faker->word;
 
-    public function test_store_brands_post_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
-        $this->actingAs($loggedUser);
+    $response = $this->post(route('brands.store'), [
+        'name' => $name
+    ]);
 
-        $name = $this->faker->word;
+    $response->assertRedirect(route('brands.index'));
+    $response->assertStatus(302);
+});
 
-        $response = $this->post(route('brands.store'), [
-            'name' => $name
-        ]);
+test('edit brands get request success', function () {
+    $loggedUser =  $this->loggedUser;
+    $brand = Brand::factory()->create();
 
-        $response->assertRedirect(route('brands.index'));
-        $response->assertStatus(302);
-    }
+    $response = $this
+        ->actingAs($loggedUser)
+        ->get(route('brands.edit', ['brand' => $brand]));
 
-    public function test_edit_brands_get_request_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
-        $brand = Brand::factory()->create();
+    $response->assertViewIs('brand.edit');
+    $response->assertStatus(200);
+});
 
-        $response = $this
-            ->actingAs($loggedUser)
-            ->get(route('brands.edit', ['brand' => $brand]));
+test('update brands post success', function () {
+    $loggedUser =  $this->loggedUser;
+    $brand = Brand::factory()->create();
 
-        $response->assertViewIs('brand.edit');
-        $response->assertStatus(200);
-    }
+    $this->actingAs($loggedUser);
 
-    public function test_update_brands_post_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
-        $brand = Brand::factory()->create();
+    $name = $this->faker->word;
+    $response = $this->post(route('brands.update', ['brand' => $brand]), [
+        'name' => $name
+    ]);
 
-        $this->actingAs($loggedUser);
+    $response->assertRedirect(route('brands.index'));
+    $response->assertStatus(302);
+});
 
-        $name = $this->faker->word;
-        $response = $this->post(route('brands.update', ['brand' => $brand]), [
-            'name' => $name
-        ]);
+test('active brands get success', function () {
+    $loggedUser =  $this->loggedUser;
+    $this->actingAs($loggedUser);
+    $brand = Brand::factory()->create(['active' => 0]);
 
-        $response->assertRedirect(route('brands.index'));
-        $response->assertStatus(302);
-    }
+    $response = $this
+        ->get(route('brands.active_deactive', ['brand' => $brand]));
 
-    public function test_active_brands_get_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
-        $this->actingAs($loggedUser);
-        $brand = Brand::factory()->create(['active' => 0]);
+    $response->assertRedirect(route('brands.index'));
+    $response->assertStatus(302);
 
-        $response = $this
-            ->get(route('brands.active_deactive', ['brand' => $brand]));
-
-        $response->assertRedirect(route('brands.index'));
-        $response->assertStatus(302);
-
-        $brandActive = Brand::find($brand->id);
-        $this->assertEquals(1, $brandActive->active);
-    }
-}
+    $brandActive = Brand::find($brand->id);
+    expect($brandActive->active)->toEqual(1);
+});

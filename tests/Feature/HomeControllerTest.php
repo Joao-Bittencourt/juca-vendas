@@ -1,20 +1,12 @@
 <?php
 
-namespace Tests\Feature;
+test('access home page get request', function () {
+    $loggedUser =  $this->loggedUser;
 
-use Tests\TestCase;
+    $response = $this
+        ->actingAs($loggedUser)
+        ->get(route('home.index'));
 
-class HomeControllerTest extends TestCase
-{
-    public function test_access_home_page_get_request(): void
-    {
-        $loggedUser =  $this->loggedUser;
-
-        $response = $this
-            ->actingAs($loggedUser)
-            ->get(route('home.index'));
-
-        $response->assertViewIs('home');
-        $response->assertStatus(200);
-    }
-}
+    $response->assertViewIs('home');
+    $response->assertStatus(200);
+});

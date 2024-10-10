@@ -1,234 +1,215 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\Customer;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 
-class CustomersControllerTest extends TestCase
-{
-    use WithFaker;
+uses(\Illuminate\Foundation\Testing\WithFaker::class);
 
+test('list customers get request', function () {
+    $loggedUser =  $this->loggedUser;
 
+    $response = $this
+        ->actingAs($loggedUser)
+        ->get(route('customers.index'));
 
-    public function test_list_customers_get_request(): void
-    {
-        $loggedUser =  $this->loggedUser;
+    $response->assertViewIs('customer.index');
+    $response->assertStatus(200);
+});
 
-        $response = $this
-            ->actingAs($loggedUser)
-            ->get(route('customers.index'));
+test('create customers get request', function () {
+    $loggedUser =  $this->loggedUser;
 
-        $response->assertViewIs('customer.index');
-        $response->assertStatus(200);
-    }
+    $response = $this
+        ->actingAs($loggedUser)
+        ->get(route('customers.create'));
 
-    public function test_create_customers_get_request(): void
-    {
-        $loggedUser =  $this->loggedUser;
+    $response->assertViewIs('customer.create');
+    $response->assertStatus(200);
+});
 
-        $response = $this
-            ->actingAs($loggedUser)
-            ->get(route('customers.create'));
+test('store customers natural person post success', function () {
+    $loggedUser =  $this->loggedUser;
+    $this->actingAs($loggedUser);
 
-        $response->assertViewIs('customer.create');
-        $response->assertStatus(200);
-    }
+    $name = $this->faker->word;
+    $email = $this->faker->email;
+    $customerType = 'N';
+    $cpf = $this->faker->numerify('###########');
+    $birthDate = $this->faker->date();
 
-    public function test_store_customers_natural_person_post_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
-        $this->actingAs($loggedUser);
+    $response = $this->post(route('customers.store'), [
+        'name' => $name,
+        'email' => $email,
+        'customer_type' => $customerType,
+        'cpf' => $cpf,
+        'birth_date' => $birthDate
+    ]);
 
-        $name = $this->faker->word;
-        $email = $this->faker->email;
-        $customerType = 'N';
-        $cpf = $this->faker->numerify('###########');
-        $birthDate = $this->faker->date();
+    $response->assertRedirect(route('customers.index'));
+    $response->assertStatus(302);
 
-        $response = $this->post(route('customers.store'), [
-            'name' => $name,
-            'email' => $email,
-            'customer_type' => $customerType,
-            'cpf' => $cpf,
-            'birth_date' => $birthDate
-        ]);
+    $this->assertDatabaseHas('customers', [
+        'name' => $name,
+        'email' => $email,
+        'customer_type' => $customerType,
+        'active' => 1 // on create it is active
+    ]);
 
-        $response->assertRedirect(route('customers.index'));
-        $response->assertStatus(302);
+    $this->assertDatabaseHas('natural_people', [
+        'cpf' => $cpf,
+        'birth_date' => $birthDate,
+    ]);
+});
 
-        $this->assertDatabaseHas('customers', [
-            'name' => $name,
-            'email' => $email,
-            'customer_type' => $customerType,
-            'active' => 1 // on create it is active
-        ]);
+test('store customers juridical person post success', function () {
+    $loggedUser =  $this->loggedUser;
+    $this->actingAs($loggedUser);
 
-        $this->assertDatabaseHas('natural_people', [
-            'cpf' => $cpf,
-            'birth_date' => $birthDate,
-        ]);
-    }
+    $name = $this->faker->word;
+    $email = $this->faker->email;
+    $customerType = 'J';
+    $cnpj = $this->faker->numerify('##############');
 
-    public function test_store_customers_juridical_person_post_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
-        $this->actingAs($loggedUser);
+    $response = $this->post(route('customers.store'), [
+        'name' => $name,
+        'email' => $email,
+        'customer_type' => $customerType,
+        'cnpj' => $cnpj
+    ]);
 
-        $name = $this->faker->word;
-        $email = $this->faker->email;
-        $customerType = 'J';
-        $cnpj = $this->faker->numerify('##############');
+    $response->assertRedirect(route('customers.index'));
+    $response->assertStatus(302);
 
-        $response = $this->post(route('customers.store'), [
-            'name' => $name,
-            'email' => $email,
-            'customer_type' => $customerType,
-            'cnpj' => $cnpj
-        ]);
+    $this->assertDatabaseHas('customers', [
+        'name' => $name,
+        'email' => $email,
+        'customer_type' => $customerType,
+        'active' => 1 // on create it is active
+    ]);
 
-        $response->assertRedirect(route('customers.index'));
-        $response->assertStatus(302);
+    $this->assertDatabaseHas('juridical_people', [
+        'cnpj' => $cnpj,
+    ]);
+});
 
-        $this->assertDatabaseHas('customers', [
-            'name' => $name,
-            'email' => $email,
-            'customer_type' => $customerType,
-            'active' => 1 // on create it is active
-        ]);
+test('edit customers natural person get request', function () {
+    $loggedUser =  $this->loggedUser;
+    $customer = Customer::factory()->create(['customer_type' => 'N']);
 
-        $this->assertDatabaseHas('juridical_people', [
-            'cnpj' => $cnpj,
-        ]);
-    }
+    $response = $this
+        ->actingAs($loggedUser)
+        ->get(route('customers.edit', ['customer' => $customer]));
 
-    public function test_edit_customers_natural_person_get_request(): void
-    {
-        $loggedUser =  $this->loggedUser;
-        $customer = Customer::factory()->create(['customer_type' => 'N']);
+    $response->assertViewIs('customer.edit');
+    $response->assertStatus(200);
+});
 
-        $response = $this
-            ->actingAs($loggedUser)
-            ->get(route('customers.edit', ['customer' => $customer]));
+test('edit customers juridical person get request', function () {
+    $loggedUser =  $this->loggedUser;
+    $customer = Customer::factory()->create(['customer_type' => 'J']);
 
-        $response->assertViewIs('customer.edit');
-        $response->assertStatus(200);
-    }
+    $response = $this
+        ->actingAs($loggedUser)
+        ->get(route('customers.edit', ['customer' => $customer]));
 
-    public function test_edit_customers_juridical_person_get_request(): void
-    {
-        $loggedUser =  $this->loggedUser;
-        $customer = Customer::factory()->create(['customer_type' => 'J']);
+    $response->assertViewIs('customer.edit');
+    $response->assertStatus(200);
+});
 
-        $response = $this
-            ->actingAs($loggedUser)
-            ->get(route('customers.edit', ['customer' => $customer]));
+test('update customers natural person post success', function () {
+    $loggedUser =  $this->loggedUser;
+    $this->actingAs($loggedUser);
 
-        $response->assertViewIs('customer.edit');
-        $response->assertStatus(200);
-    }
+    $customer = Customer::factory()->create();
 
-    public function test_update_customers_natural_person_post_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
-        $this->actingAs($loggedUser);
+    $name = $this->faker->word;
+    $email = $this->faker->email;
+    $customerType = 'N';
+    $cpf = $this->faker->numerify('###########');
+    $birthDate = $this->faker->date();
 
-        $customer = Customer::factory()->create();
+    $response = $this->post(route('customers.update', ['customer' => $customer]), [
+        'name' => $name,
+        'email' => $email,
+        'customer_type' => $customerType,
+        'cpf' => $cpf,
+        'birth_date' => $birthDate
+    ]);
 
-        $name = $this->faker->word;
-        $email = $this->faker->email;
-        $customerType = 'N';
-        $cpf = $this->faker->numerify('###########');
-        $birthDate = $this->faker->date();
+    $response->assertRedirect(route('customers.index'));
+    $response->assertStatus(302);
 
-        $response = $this->post(route('customers.update', ['customer' => $customer]), [
-            'name' => $name,
-            'email' => $email,
-            'customer_type' => $customerType,
-            'cpf' => $cpf,
-            'birth_date' => $birthDate
-        ]);
+    $this->assertDatabaseHas('customers', [
+        'name' => $name,
+        'email' => $email,
+        'customer_type' => $customerType,
+    ]);
 
-        $response->assertRedirect(route('customers.index'));
-        $response->assertStatus(302);
+    // @todo: test natural people
+    // $this->assertDatabaseHas('natural_people', [
+    //     'cpf' => $cpf,
+    //     'birth_date' => $birthDate,
+    // ]);
+});
 
-        $this->assertDatabaseHas('customers', [
-            'name' => $name,
-            'email' => $email,
-            'customer_type' => $customerType,
-        ]);
+test('update customers juridical person post success', function () {
+    $loggedUser =  $this->loggedUser;
+    $this->actingAs($loggedUser);
 
-        // @todo: test natural people
-        // $this->assertDatabaseHas('natural_people', [
-        //     'cpf' => $cpf,
-        //     'birth_date' => $birthDate,
-        // ]);
-    }
+    $customer = Customer::factory()->create();
 
-    public function test_update_customers_juridical_person_post_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
-        $this->actingAs($loggedUser);
+    $name = $this->faker->word;
+    $email = $this->faker->email;
+    $customerType = 'J';
+    $cnpj = $this->faker->numerify('##############');
 
-        $customer = Customer::factory()->create();
+    $response = $this->post(route('customers.update', ['customer' => $customer]), [
+        'name' => $name,
+        'email' => $email,
+        'customer_type' => $customerType,
+        'cnpj' => $cnpj,
+    ]);
 
-        $name = $this->faker->word;
-        $email = $this->faker->email;
-        $customerType = 'J';
-        $cnpj = $this->faker->numerify('##############');
+    $response->assertRedirect(route('customers.index'));
+    $response->assertStatus(302);
 
-        $response = $this->post(route('customers.update', ['customer' => $customer]), [
-            'name' => $name,
-            'email' => $email,
-            'customer_type' => $customerType,
-            'cnpj' => $cnpj,
-        ]);
+    $this->assertDatabaseHas('customers', [
+        'name' => $name,
+        'email' => $email,
+        'customer_type' => $customerType,
+    ]);
 
-        $response->assertRedirect(route('customers.index'));
-        $response->assertStatus(302);
+    // @todo: test juridical people
+    // $this->assertDatabaseHas('juridical_people', [
+    //     'cnpj' => $cnpj,
+    // ]);
+});
 
-        $this->assertDatabaseHas('customers', [
-            'name' => $name,
-            'email' => $email,
-            'customer_type' => $customerType,
-        ]);
+test('active customers get request', function () {
+    $loggedUser =  $this->loggedUser;
+    $customer = Customer::factory()->create(['active' => 0]);
 
-        // @todo: test juridical people
-        // $this->assertDatabaseHas('juridical_people', [
-        //     'cnpj' => $cnpj,
-        // ]);
-    }
+    $response = $this
+        ->actingAs($loggedUser)
+        ->get(route('customers.active_deactive', ['customer' => $customer]));
 
-    public function test_active_customers_get_request(): void
-    {
-        $loggedUser =  $this->loggedUser;
-        $customer = Customer::factory()->create(['active' => 0]);
+    $response->assertRedirect(route('customers.index'));
+    $response->assertStatus(302);
 
-        $response = $this
-            ->actingAs($loggedUser)
-            ->get(route('customers.active_deactive', ['customer' => $customer]));
+    $customerActive = Customer::find($customer->id);
+    expect($customerActive->active)->toEqual(1);
+});
 
-        $response->assertRedirect(route('customers.index'));
-        $response->assertStatus(302);
+test('deactive customers get request', function () {
+    $loggedUser =  $this->loggedUser;
+    $customer = Customer::factory()->create(['active' => 1]);
 
-        $customerActive = Customer::find($customer->id);
-        $this->assertEquals(1, $customerActive->active);
-    }
+    $response = $this
+        ->actingAs($loggedUser)
+        ->get(route('customers.active_deactive', ['customer' => $customer]));
 
-    public function test_deactive_customers_get_request(): void
-    {
-        $loggedUser =  $this->loggedUser;
-        $customer = Customer::factory()->create(['active' => 1]);
+    $response->assertRedirect(route('customers.index'));
+    $response->assertStatus(302);
 
-        $response = $this
-            ->actingAs($loggedUser)
-            ->get(route('customers.active_deactive', ['customer' => $customer]));
-
-        $response->assertRedirect(route('customers.index'));
-        $response->assertStatus(302);
-
-        $customerActive = Customer::find($customer->id);
-        $this->assertEquals(0, $customerActive->active);
-    }
-}
+    $customerActive = Customer::find($customer->id);
+    expect($customerActive->active)->toEqual(0);
+});

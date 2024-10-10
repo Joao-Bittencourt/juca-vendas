@@ -1,134 +1,117 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\Brand;
 use App\Models\Product;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 
-class ProductsControllerTest extends TestCase
-{
-    use WithFaker;
+uses(\Illuminate\Foundation\Testing\WithFaker::class);
 
+test('list products get request success', function () {
+    $loggedUser =  $this->loggedUser;
 
+    $response = $this
+        ->actingAs($loggedUser)
+        ->get(route('products.index'));
 
-    public function test_list_products_get_request_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
+    $response->assertViewIs('product.index');
+    $response->assertStatus(200);
+});
 
-        $response = $this
-            ->actingAs($loggedUser)
-            ->get(route('products.index'));
+test('create products get request success', function () {
+    $loggedUser =  $this->loggedUser;
 
-        $response->assertViewIs('product.index');
-        $response->assertStatus(200);
-    }
+    $response = $this
+        ->actingAs($loggedUser)
+        ->get(route('products.create'));
 
-    public function test_create_products_get_request_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
+    $response->assertViewIs('product.create');
+    $response->assertStatus(200);
+});
 
-        $response = $this
-            ->actingAs($loggedUser)
-            ->get(route('products.create'));
+test('store products post success', function () {
+    $brand = Brand::factory()->create();
 
-        $response->assertViewIs('product.create');
-        $response->assertStatus(200);
-    }
+    $loggedUser =  $this->loggedUser;
+    $this->actingAs($loggedUser);
 
-    public function test_store_products_post_success(): void
-    {
-        $brand = Brand::factory()->create();
+    $name = $this->faker->word;
+    $codProduct = $this->faker->regexify('[A-Za-z0-9]{4}');
+    $description = $this->faker->word;
+    $price = fake()->numberBetween(1, 300) . '.' . fake()->randomNumber(2, true);
 
-        $loggedUser =  $this->loggedUser;
-        $this->actingAs($loggedUser);
+    $response = $this->post(route('products.store'), [
+        'name' => $name,
+        'cod_product' => $codProduct,
+        'description' => $description,
+        'price' => $price,
+        'brand_id' => $brand->id
+    ]);
 
-        $name = $this->faker->word;
-        $codProduct = $this->faker->regexify('[A-Za-z0-9]{4}');
-        $description = $this->faker->word;
-        $price = fake()->numberBetween(1, 300) . '.' . fake()->randomNumber(2, true);
+    $response->assertRedirect(route('products.index'));
+    $response->assertStatus(302);
+});
 
-        $response = $this->post(route('products.store'), [
-            'name' => $name,
-            'cod_product' => $codProduct,
-            'description' => $description,
-            'price' => $price,
-            'brand_id' => $brand->id
-        ]);
+test('edit products get request success', function () {
+    $loggedUser =  $this->loggedUser;
+    $product = Product::factory()->create();
 
-        $response->assertRedirect(route('products.index'));
-        $response->assertStatus(302);
-    }
+    $response = $this
+        ->actingAs($loggedUser)
+        ->get(route('products.edit', ['product' => $product]));
 
-    public function test_edit_products_get_request_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
-        $product = Product::factory()->create();
+    $response->assertViewIs('product.edit');
+    $response->assertStatus(200);
+});
 
-        $response = $this
-            ->actingAs($loggedUser)
-            ->get(route('products.edit', ['product' => $product]));
+test('update products post success', function () {
+    $loggedUser =  $this->loggedUser;
+    $product = Product::factory()->create();
+    $brand = Brand::factory()->create();
 
-        $response->assertViewIs('product.edit');
-        $response->assertStatus(200);
-    }
+    $this->actingAs($loggedUser);
 
-    public function test_update_products_post_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
-        $product = Product::factory()->create();
-        $brand = Brand::factory()->create();
+    $name = $this->faker->word;
+    $codProduct = $this->faker->regexify('[A-Za-z0-9]{4}');
+    $description = $this->faker->word;
+    $price = fake()->numberBetween(1, 100) . '.' . fake()->randomNumber(2, true);
 
-        $this->actingAs($loggedUser);
+    $response = $this->post(route('products.update', ['product' => $product]), [
+        'name' => $name,
+        'cod_product' => $codProduct,
+        'description' => $description,
+        'price' => $price,
+        'brand_id' => $brand->id
+    ]);
 
-        $name = $this->faker->word;
-        $codProduct = $this->faker->regexify('[A-Za-z0-9]{4}');
-        $description = $this->faker->word;
-        $price = fake()->numberBetween(1, 100) . '.' . fake()->randomNumber(2, true);
+    $response->assertRedirect(route('products.index'));
+    $response->assertStatus(302);
+});
 
-        $response = $this->post(route('products.update', ['product' => $product]), [
-            'name' => $name,
-            'cod_product' => $codProduct,
-            'description' => $description,
-            'price' => $price,
-            'brand_id' => $brand->id
-        ]);
+test('deactive products get success', function () {
+    $loggedUser =  $this->loggedUser;
+    $product = Product::factory()->create();
+    $this->actingAs($loggedUser);
 
-        $response->assertRedirect(route('products.index'));
-        $response->assertStatus(302);
-    }
+    $response = $this
+        ->get(route('products.active_deactive', ['product' => $product]));
 
-    public function test_deactive_products_get_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
-        $product = Product::factory()->create();
-        $this->actingAs($loggedUser);
+    $response->assertRedirect(route('products.index'));
+    $response->assertStatus(302);
 
-        $response = $this
-            ->get(route('products.active_deactive', ['product' => $product]));
+    $productDeactive = Product::find($product->id);
+    expect($productDeactive->active)->toEqual(0);
+});
 
+test('active products get success', function () {
+    $loggedUser =  $this->loggedUser;
+    $product = Product::factory()->create(['active' => 0]);
+    $this->actingAs($loggedUser);
 
-        $response->assertRedirect(route('products.index'));
-        $response->assertStatus(302);
+    $response = $this
+        ->get(route('products.active_deactive', ['product' => $product]));
 
-        $productDeactive = Product::find($product->id);
-        $this->assertEquals(0, $productDeactive->active);
-    }
+    $response->assertRedirect(route('products.index'));
+    $response->assertStatus(302);
 
-    public function test_active_products_get_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
-        $product = Product::factory()->create(['active' => 0]);
-        $this->actingAs($loggedUser);
-
-        $response = $this
-            ->get(route('products.active_deactive', ['product' => $product]));
-
-        $response->assertRedirect(route('products.index'));
-        $response->assertStatus(302);
-
-        $producActive = Product::find($product->id);
-        $this->assertEquals(1, $producActive->active);
-    }
-}
+    $producActive = Product::find($product->id);
+    expect($producActive->active)->toEqual(1);
+});

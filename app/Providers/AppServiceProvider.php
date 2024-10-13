@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Kernel;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,8 +20,11 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+    public function boot(Kernel $kernel): void
     {
-        //
+        if (env('INSPECTOR_INGESTION_KEY')) {
+            $kernel->appendMiddlewareToGroup('web', \Inspector\Laravel\Middleware\WebRequestMonitoring::class);               
+            $kernel->appendMiddlewareToGroup('api', \Inspector\Laravel\Middleware\WebRequestMonitoring::class);               
+        }
     }
 }

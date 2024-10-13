@@ -19,7 +19,7 @@ class TransactionFactory extends Factory
             'payment_method_id' => $paymentMethod->id,
             'sale_id' => $sale->id,
             'type' => fake()->randomElement(['credit', 'debit']),
-            'amount' => fake()->randomFloat(2, 1, 1000),
+            'amount' => number_format(fake()->randomFloat(2, 1, 1000), 2, '.', ''),
             'installment_number' => $paymentMethodNumberMaxInstallments,
             'date' => fake()->date(),
             'due_date' => fake()->date(),

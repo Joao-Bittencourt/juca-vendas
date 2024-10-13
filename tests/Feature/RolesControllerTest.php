@@ -38,7 +38,7 @@ class RolesControllerTest extends TestCase
     {
         $loggedUser =  $this->loggedUser;
 
-        $name = $this->faker->word;
+        $name = $this->faker->sentence();
         $response = $this
             ->actingAs($loggedUser)
             ->post(route('roles.store'), [
@@ -55,7 +55,7 @@ class RolesControllerTest extends TestCase
     {
         $loggedUser =  $this->loggedUser;
 
-        $name = $this->faker->word;
+        $name = $this->faker->sentence();
         $role = Role::create(['name' => $name]);
 
         $response = $this
@@ -70,7 +70,7 @@ class RolesControllerTest extends TestCase
     {
         $loggedUser =  $this->loggedUser;
 
-        $name = $this->faker->word;
+        $name = $this->faker->sentence();
         $role = Role::create(['name' => $name]);
 
         $response = $this
@@ -89,7 +89,7 @@ class RolesControllerTest extends TestCase
     {
         $loggedUser =  $this->loggedUser;
 
-        $name = $this->faker->word;
+        $name = $this->faker->sentence();
         $role = Role::create(['name' => $name]);
 
         $response = $this
@@ -104,11 +104,11 @@ class RolesControllerTest extends TestCase
     {
         $loggedUser =  $this->loggedUser;
 
-        $name = $this->faker->word;
+        $name = $this->faker->sentence();
         $role = Role::create(['name' => $name]);
 
-        $nameA = $this->faker->word;
-        $nameB = $this->faker->word;
+        $nameA = $this->faker->sentence();
+        $nameB = $this->faker->sentence();
 
         $permissionA = $role->permissions()->create(['name' => $nameA]);
         $permissionB = $role->permissions()->create(['name' => $nameB]);

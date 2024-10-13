@@ -11,10 +11,17 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [8.1, 8.2, 8.3]
+
+    name: PHP ${{ matrix.php }}
+
     steps:
     - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
       with:
-        php-version: '8.2'
+       php-version: ${{ matrix.php }}
     - uses: actions/checkout@v3
     
     - name: Copy .env
@@ -45,7 +52,13 @@ jobs:
         vendor/bin/phpunit --coverage-clover=coverage.xml
 
     - name: Code Coverage Report
-      if: success()
+      if: success() && matrix.php == '8.2' 
       uses: codecov/codecov-action@v4.0.1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+
+    - name: SonarCloud Scan
+      if: matrix.php == '8.2'
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Http\Kernel;
+use App\Models\User;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +29,10 @@ class AppServiceProvider extends ServiceProvider
             $kernel->appendMiddlewareToGroup('web', \Inspector\Laravel\Middleware\WebRequestMonitoring::class);
             $kernel->appendMiddlewareToGroup('api', \Inspector\Laravel\Middleware\WebRequestMonitoring::class);
         }
+
+        Gate::define('viewPulse', function (User $user) {
+            return $user->id == 1;
+        });
 
         Paginator::useBootstrap();
     }

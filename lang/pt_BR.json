@@ -45,6 +45,15 @@
     
     "Data saved successfully!" : "Dados salvos com sucesso!",
     "There are no records." : "Não há registros.",
+
+    "Showing from " : "Exibindo ",
+    " to " : " a ",
+    " of " : " de ",
+    " from " : " de ",
+
+    "Previous" : "Anterior",
+    "Next" : "Próximo",
+    "No records found" : "Nenhum registro encontrado",
     
     "Brand" : "Marca",
     "Brands" : "Marcas",

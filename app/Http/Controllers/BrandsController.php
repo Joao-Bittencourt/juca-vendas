@@ -10,7 +10,7 @@ class BrandsController extends Controller
     public function index()
     {
         return view('brand.index', [
-            'brands' => Brand::all(),
+            'brands' => Brand::paginate(Controller::DEFAULT_PAGE_SIZE),
         ]);
     }
 

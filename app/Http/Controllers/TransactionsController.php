@@ -11,7 +11,7 @@ class TransactionsController extends Controller
     public function index()
     {
         return view('transaction.index', [
-            'transactions' => Transaction::all(),
+            'transactions' => Transaction::with('paymentMethod')->paginate(Controller::DEFAULT_PAGE_SIZE)
         ]);
     }
 

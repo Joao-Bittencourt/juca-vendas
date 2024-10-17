@@ -3,7 +3,6 @@
 namespace Tests\Unit\Models;
 
 use App\Models\PaymentMethod;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Tests\TestCase;
 
 class PaymentMethodTest extends TestCase

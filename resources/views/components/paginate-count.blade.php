@@ -2,7 +2,7 @@
 'data' => null
 ])
 
-@if (is_object($data) && property_exists($data, 'links'))
+@if (is_object($data) && method_exists($data, 'links') && $data?->total() > 0)
 <div class="row mt-2">
     <div class="col-lg-10">
         {{ __("Showing from ") .  $data?->firstItem() . __(' to ') . $data?->lastItem() . __(' of ') . $data?->total() }}

@@ -72,7 +72,7 @@ class PermissionEnum
     public const PERMISSIONS_EDIT = 'permissions_edit';
     public const PERMISSIONS_UPDATE = 'permissions_update';
 
-    public const PULSE = 'pulse';	
+    public const PULSE = 'pulse';
 
     public static function getPermissions(string $module): array
     {

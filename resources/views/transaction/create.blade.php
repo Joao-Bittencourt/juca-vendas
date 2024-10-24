@@ -45,12 +45,12 @@
                         </div>
                         <div class="col-lg-2">
                             <x-input-label for="due_date" :value="__('Due date')" />
-                            <x-text-input id="due_date" name="due_date" type="date" class="form-control" :value="old('due_date')" required autofocus autocomplete="due_date" />
+                            <x-text-input id="due_date" name="due_date" type="date" class="form-control" :value="old('due_date')" autofocus autocomplete="due_date" />
                             <x-input-error class="mt-2" :messages="$errors->get('due_date')" />
                         </div>
                         <div class="col-lg-2">
                             <x-input-label for="paid_date" :value="__('Paid date')" />
-                            <x-text-input id="paid_date" name="paid_date" type="date" class="form-control" :value="old('paid_date')" required autofocus autocomplete="paid_date" />
+                            <x-text-input id="paid_date" name="paid_date" type="date" class="form-control" :value="old('paid_date')" autofocus autocomplete="paid_date" />
                             <x-input-error class="mt-2" :messages="$errors->get('paid_date')" />
                         </div>
 

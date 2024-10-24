@@ -19,13 +19,13 @@ class TransactionRequest extends FormRequest
             'type' => ['required', 'in:credit,debit'],
             'amount' => ['required', 'numeric', 'regex:/[0-9][,|.][0-9]{2}/'],
             'date' => ['required', 'date'],
-            'due_date' => ['sometimes', 'date'],
-            'paid_date' => ['sometimes', 'date'],
+            'due_date' => ['nullable', 'date'],
+            'paid_date' => ['nullable', 'date'],
             'installment_quantity' => ['required', 'numeric', 'min:1', 'max:' . $maxInstallments],
-            'installments.*.amount' => ['sometimes', 'regex:/[0-9][,|.][0-9]{2}/'],
-            'installments.*.date' => ['sometimes', 'date'],
-            'installments.*.due_date' => ['sometimes', 'date'],
-            'installments.*.paid_date' => ['sometimes', 'date'],
+            'installments.*.amount' => ['required', 'regex:/[0-9][,|.][0-9]{2}/'],
+            'installments.*.date' => ['required', 'date'],
+            'installments.*.due_date' => ['nullable', 'date'],
+            'installments.*.paid_date' => ['nullable', 'date'],
         ];
     }
 }

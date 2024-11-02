@@ -11,8 +11,6 @@ class TransactionsControllerTest extends TestCase
 {
     use WithFaker;
 
-
-
     public function test_list_transactions_get_request_success(): void
     {
         $loggedUser =  $this->loggedUser;
@@ -40,10 +38,15 @@ class TransactionsControllerTest extends TestCase
     public function test_store_credit_transactions_post_success(): void
     {
         $transaction = Transaction::factory()->create(['type' => 'credit']);
-        $transaction->installment_quantity = 1;
+
         $transaction->installments = [
-            ['amount' => number_format($transaction->amount, 2, '.', '')]
+            [
+                'amount' => number_format($transaction->amount, 2, '.', ''),
+                'date' => $transaction->date,
+            ]
         ];
+
+        $transaction->installment_quantity = count($transaction->installments);
 
         $loggedUser =  $this->loggedUser;
         $response = $this
@@ -68,11 +71,15 @@ class TransactionsControllerTest extends TestCase
     public function test_store_debit_transactions_post_success(): void
     {
         $transaction = Transaction::factory()->create(['type' => 'debit']);
-        $transaction->installment_quantity = 1;
 
         $transaction->installments = [
-            ['amount' => number_format($transaction->amount, 2, '.', '')]
+            [
+                'amount' => number_format($transaction->amount, 2, '.', ''),
+                'date' => $transaction->date,
+            ]
         ];
+
+        $transaction->installment_quantity = count($transaction->installments);
 
         $loggedUser =  $this->loggedUser;
         $response = $this
@@ -90,7 +97,7 @@ class TransactionsControllerTest extends TestCase
             'installment_number' => $transaction->installment_number,
             'date' => $transaction->date,
             'due_date' => $transaction->due_date,
-            'paid_date' => $transaction->paid_date,
+            'paid_date' => $transaction->paid_date
         ]);
     }
 

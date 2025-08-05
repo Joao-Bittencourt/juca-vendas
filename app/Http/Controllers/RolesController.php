@@ -12,9 +12,8 @@ class RolesController extends Controller
 {
     public function index()
     {
-        $roles = Role::all();
         return view('role.index', [
-            'roles' => $roles
+            'roles' => Role::paginate(Controller::DEFAULT_PAGE_SIZE)
         ]);
     }
 

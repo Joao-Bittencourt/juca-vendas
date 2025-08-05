@@ -1,18 +1,16 @@
-@props(['data' => []])
+@props(['data' => [
+    ]])
 
 <div class="card-body">
     <div class="row">
         <div class="col-lg-12">
             <div class="main-box clearfix">
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-sm table-hover table-centered table-nowrap mb-0">
                         <thead>
                             <tr>
                                 <th>{{ __('Cod') }}</th>
-                                <th>{{ __('Name')}}</th>
-                                <th class="text-center">{{ __('Max installments') }}</th>
-                                <th class="text-center">{{ __('Show on store') }}</th>
-                                <th class="text-center">{{ __('Show on finance') }}</th>
+                                <th>{{ __('Brand')}}</th>
                                 <th class="text-center">{{ __('Status') }}</th>
                                 <th class="text-center">{{ __('Created at') }}</th>
                                 <th>&nbsp;</th>
@@ -26,18 +24,6 @@
                                 </td>
                                 <td>
                                     {{ $unit->name }}
-
-                                </td>
-                                <td class="text-center">
-                                    {{ $unit->number_max_installments }}
-
-                                </td>
-                                <td class="text-center">
-                                    {{ $unit->show_on_store == '1' ? __('Yes') : __('No') }}
-
-                                </td>
-                                <td class="text-center">
-                                    {{ $unit->show_on_finance == '1' ? __('Yes') : __('No') }}
 
                                 </td>
                                 <td class="text-center">

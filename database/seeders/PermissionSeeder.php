@@ -37,6 +37,7 @@ class PermissionSeeder extends Seeder
                 $permissionsPermission,
                 [
                     PermissionEnum::HOME_INDEX,
+                    PermissionEnum::PULSE,
                 ]
             )
         );
@@ -146,5 +147,7 @@ class PermissionSeeder extends Seeder
         Permission::firstOrCreate(['name' => PermissionEnum::PERMISSIONS_STORE]);
         Permission::firstOrCreate(['name' => PermissionEnum::PERMISSIONS_EDIT]);
         Permission::firstOrCreate(['name' => PermissionEnum::PERMISSIONS_UPDATE]);
+
+        Permission::firstOrCreate(['name' => PermissionEnum::PULSE]);
     }
 }

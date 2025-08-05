@@ -10,7 +10,7 @@ class PaymentMethodsController extends Controller
     public function index()
     {
         return view('payment-method.index', [
-            'paymentMethods' => PaymentMethod::all(),
+            'paymentMethods' => PaymentMethod::paginate(Controller::DEFAULT_PAGE_SIZE),
         ]);
     }
 

@@ -19,7 +19,6 @@ arch('app models')
     ->toExtend('App\Models\BaseModel')
     ->ignoring([
         'App\Models\Permission',
-        'App\Models\Role', 
+        'App\Models\Role',
         'App\Models\User'
     ]);
-

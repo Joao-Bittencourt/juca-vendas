@@ -1,28 +1,14 @@
 <?php
 
-namespace Tests\Unit\Models;
-
 use App\Models\SaleItem;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Tests\TestCase;
 
-class SaleItemTest extends TestCase
-{
-    public function test_sale_item_belongs_to_product(): void
-    {
-        $saleItem = new SaleItem();
-        $this->assertInstanceOf(
-            BelongsTo::class,
-            $saleItem->product()
-        );
-    }
+test('sale item belongs to product', function () {
+    $saleItem = new SaleItem();
+    expect($saleItem->product())->toBeInstanceOf(BelongsTo::class);
+});
 
-    public function test_sale_item_belongs_to_sale(): void
-    {
-        $saleItem = new SaleItem();
-        $this->assertInstanceOf(
-            BelongsTo::class,
-            $saleItem->sale()
-        );
-    }
-}
+test('sale item belongs to sale', function () {
+    $saleItem = new SaleItem();
+    expect($saleItem->sale())->toBeInstanceOf(BelongsTo::class);
+});

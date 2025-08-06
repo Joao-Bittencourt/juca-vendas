@@ -1,125 +1,111 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\Role;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 
-class RolesControllerTest extends TestCase
-{
-    use WithFaker;
+uses(\Illuminate\Foundation\Testing\WithFaker::class);
 
-    public function test_list_roles_get_request_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
+test('list roles get request success', function () {
+    $loggedUser =  $this->loggedUser;
 
-        $response = $this
-            ->actingAs($loggedUser)
-            ->get(route('roles.index'));
+    $response = $this
+        ->actingAs($loggedUser)
+        ->get(route('roles.index'));
 
-        $response->assertViewIs('role.index');
-        $response->assertStatus(200);
-    }
+    $response->assertViewIs('role.index');
+    $response->assertStatus(200);
+});
 
-    public function test_create_roles_get_request_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
+test('create roles get request success', function () {
+    $loggedUser =  $this->loggedUser;
 
-        $response = $this
-            ->actingAs($loggedUser)
-            ->get(route('roles.create'));
+    $response = $this
+        ->actingAs($loggedUser)
+        ->get(route('roles.create'));
 
-        $response->assertViewIs('role.create');
-        $response->assertStatus(200);
-    }
+    $response->assertViewIs('role.create');
+    $response->assertStatus(200);
+});
 
-    public function test_store_roles_post_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
+test('store roles post success', function () {
+    $loggedUser =  $this->loggedUser;
 
-        $name = $this->faker->sentence();
-        $response = $this
-            ->actingAs($loggedUser)
-            ->post(route('roles.store'), [
-                'name' => $name
-            ]);
+    $name = $this->faker->word;
+    $response = $this
+        ->actingAs($loggedUser)
+        ->post(route('roles.store'), [
+            'name' => $name
+        ]);
 
-        $response->assertRedirect(route('roles.index'));
-        $response->assertStatus(302);
+    $response->assertRedirect(route('roles.index'));
+    $response->assertStatus(302);
 
-        $this->assertDatabaseHas('roles', ['name' => $name]);
-    }
+    $this->assertDatabaseHas('roles', ['name' => $name]);
+});
 
-    public function test_edit_roles_get_request_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
+test('edit roles get request success', function () {
+    $loggedUser =  $this->loggedUser;
 
-        $name = $this->faker->sentence();
-        $role = Role::create(['name' => $name]);
+    $name = $this->faker->word;
+    $role = Role::create(['name' => $name]);
 
-        $response = $this
-            ->actingAs($loggedUser)
-            ->get(route('roles.edit', ['role' => $role]));
+    $response = $this
+        ->actingAs($loggedUser)
+        ->get(route('roles.edit', ['role' => $role]));
 
-        $response->assertViewIs('role.edit');
-        $response->assertStatus(200);
-    }
+    $response->assertViewIs('role.edit');
+    $response->assertStatus(200);
+});
 
-    public function test_update_roles_post_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
+test('update roles post success', function () {
+    $loggedUser =  $this->loggedUser;
 
-        $name = $this->faker->sentence();
-        $role = Role::create(['name' => $name]);
+    $name = $this->faker->word;
+    $role = Role::create(['name' => $name]);
 
-        $response = $this
-            ->actingAs($loggedUser)
-            ->post(route('roles.update', ['role' => $role]), [
-                'name' => $name . ' - updated'
-            ]);
+    $response = $this
+        ->actingAs($loggedUser)
+        ->post(route('roles.update', ['role' => $role]), [
+            'name' => $name . ' - updated'
+        ]);
 
-        $response->assertRedirect(route('roles.index'));
-        $response->assertStatus(302);
+    $response->assertRedirect(route('roles.index'));
+    $response->assertStatus(302);
 
-        $this->assertDatabaseHas('roles', ['name' => $name . ' - updated']);
-    }
+    $this->assertDatabaseHas('roles', ['name' => $name . ' - updated']);
+});
 
-    public function test_add_permission_to_role_get_request_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
+test('add permission to role get request success', function () {
+    $loggedUser =  $this->loggedUser;
 
-        $name = $this->faker->sentence();
-        $role = Role::create(['name' => $name]);
+    $name = $this->faker->word;
+    $role = Role::create(['name' => $name]);
 
-        $response = $this
-            ->actingAs($loggedUser)
-            ->get(route('roles.add_permission_to_role', ['roleId' => $role->id]));
+    $response = $this
+        ->actingAs($loggedUser)
+        ->get(route('roles.add_permission_to_role', ['roleId' => $role->id]));
 
-        $response->assertViewIs('role.add_permissions');
-        $response->assertStatus(200);
-    }
+    $response->assertViewIs('role.add_permissions');
+    $response->assertStatus(200);
+});
 
-    public function test_give_permission_to_role_post_success(): void
-    {
-        $loggedUser =  $this->loggedUser;
+test('give permission to role post success', function () {
+    $loggedUser =  $this->loggedUser;
 
-        $name = $this->faker->sentence();
-        $role = Role::create(['name' => $name]);
+    $name = $this->faker->word;
+    $role = Role::create(['name' => $name]);
 
-        $nameA = $this->faker->sentence();
-        $nameB = $this->faker->sentence();
+    $nameA = $this->faker->word;
+    $nameB = $this->faker->word;
 
-        $permissionA = $role->permissions()->create(['name' => $nameA]);
-        $permissionB = $role->permissions()->create(['name' => $nameB]);
+    $permissionA = $role->permissions()->create(['name' => $nameA]);
+    $permissionB = $role->permissions()->create(['name' => $nameB]);
 
-        $response = $this
-            ->actingAs($loggedUser)
-            ->post(route('roles.give_permission_to_role', ['roleId' => $role->id]), [
-                'permission' => [$permissionA->name, $permissionB->name]
-            ]);
+    $response = $this
+        ->actingAs($loggedUser)
+        ->post(route('roles.give_permission_to_role', ['roleId' => $role->id]), [
+            'permission' => [$permissionA->name, $permissionB->name]
+        ]);
 
-        $response->assertRedirect(route('roles.index'));
-        $response->assertStatus(302);
-    }
-}
+    $response->assertRedirect(route('roles.index'));
+    $response->assertStatus(302);
+});

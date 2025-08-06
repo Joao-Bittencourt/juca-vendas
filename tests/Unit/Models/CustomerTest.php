@@ -1,55 +1,38 @@
 <?php
 
-namespace Tests\Unit\Models;
-
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Tests\TestCase;
 
-class CustomerTest extends TestCase
-{
-    public function test_get_customer_type(): void
-    {
-        $customer = new Customer();
+test('get customer type', function () {
+    $customer = new Customer();
 
-        $this->assertEquals('Natural person', $customer->getCustomerType('N'));
-        $this->assertEquals('Juridical person', $customer->getCustomerType('J'));
+    expect($customer->getCustomerType('N'))->toEqual('Natural person');
+    expect($customer->getCustomerType('J'))->toEqual('Juridical person');
 
-        $this->assertNull($customer->getCustomerType('X'));
-    }
+    expect($customer->getCustomerType('X'))->toBeNull();
+});
 
-    public function test_get_customer_types(): void
-    {
-        $customer = new Customer();
+test('get customer types', function () {
+    $customer = new Customer();
 
-        $this->assertEquals([
-            'N' => 'Natural person',
-            'J' => 'Juridical person',
-        ], $customer->getCustomerTypes());
-    }
+    expect($customer->getCustomerTypes())->toEqual([
+        'N' => 'Natural person',
+        'J' => 'Juridical person',
+    ]);
+});
 
-    public function test_customer_has_one_natural_person(): void
-    {
-        $customer = new Customer();
+test('customer has one natural person', function () {
+    $customer = new Customer();
 
-        $this->assertInstanceOf(
-            HasOne::class,
-            $customer->natural_person()
-        );
-    }
+    expect($customer->natural_person())->toBeInstanceOf(HasOne::class);
+});
 
-    public function test_customer_has_one_juridical_person(): void
-    {
-        $customer = new Customer();
-        $this->assertInstanceOf(
-            HasOne::class,
-            $customer->juridical_person()
-        );
-    }
+test('customer has one juridical person', function () {
+    $customer = new Customer();
+    expect($customer->juridical_person())->toBeInstanceOf(HasOne::class);
+});
 
-    public function test_customer_get_actions(): void
-    {
-        $customer = (new Customer())->factory()->create();
-        $this->assertIsArray($customer->getActions());
-    }
-}
+test('customer get actions', function () {
+    $customer = (new Customer())->factory()->create();
+    expect($customer->getActions())->toBeArray();
+});

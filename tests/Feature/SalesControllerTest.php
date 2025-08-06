@@ -19,7 +19,7 @@ test('list sales get request success', function () {
 
 test('view sales get request success', function () {
     $loggedUser =  $this->loggedUser;
-    $sale = Sale::factory()->create();
+    $sale = Sale::factory()->create()->fresh();
 
     $response = $this
         ->actingAs($loggedUser)

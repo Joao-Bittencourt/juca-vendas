@@ -17,10 +17,8 @@ test('list transactions get request success', function () {
 });
 
 test('create transactions get request success', function () {
-    $loggedUser =  $this->loggedUser;
-
     $response = $this
-        ->actingAs($loggedUser)
+        ->actingAs($this->loggedUser)
         ->get(route('transactions.create'));
 
     $response->assertViewIs('transaction.create');
@@ -31,12 +29,14 @@ test('store credit transactions post success', function () {
     $transaction = Transaction::factory()->create(['type' => 'credit']);
     $transaction->installment_quantity = 1;
     $transaction->installments = [
-        ['amount' => number_format($transaction->amount, 2, '.', '')]
+        [
+            'amount' => number_format($transaction->amount, 2, '.', ''),
+            'date' => $transaction->date
+        ]
     ];
 
-    $loggedUser =  $this->loggedUser;
     $response = $this
-        ->actingAs($loggedUser)
+        ->actingAs($this->loggedUser)
         ->post(route('transactions.store'), $transaction->toArray());
 
     $response->assertRedirect(route('transactions.index'));
@@ -59,7 +59,10 @@ test('store debit transactions post success', function () {
     $transaction->installment_quantity = 1;
 
     $transaction->installments = [
-        ['amount' => number_format($transaction->amount, 2, '.', '')]
+        [
+            'amount' => number_format($transaction->amount, 2, '.', ''),
+            'date' => $transaction->date
+        ]
     ];
 
     $loggedUser =  $this->loggedUser;

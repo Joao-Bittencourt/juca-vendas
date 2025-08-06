@@ -3,18 +3,12 @@
 namespace Tests\Unit\Models;
 
 use App\Models\PaymentMethod;
-use Tests\TestCase;
 
-class PaymentMethodTest extends TestCase
-{
-    public function test_payment_method_get_actions()
-    {
-        $paymentMethod = (new PaymentMethod())->factory()->create();
-        $this->assertIsArray($paymentMethod->getActions());
-    }
+test('payment method get actions', function () {
+    $paymentMethod = PaymentMethod::factory()->create();
+    expect($paymentMethod->getActions())->toBeArray();
+});
 
-    public function test_max_installments()
-    {
-        $this->assertEquals(99, PaymentMethod::MAX_INSTALLMENTS);
-    }
-}
+test('payment method max installments', function () {
+    expect(PaymentMethod::MAX_INSTALLMENTS)->toBe(99);
+});

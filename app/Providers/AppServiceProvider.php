@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use App\Http\Kernel;
@@ -25,13 +27,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(Kernel $kernel): void
     {
-        if (env('INSPECTOR_INGESTION_KEY')) {
-            $kernel->appendMiddlewareToGroup('web', \Inspector\Laravel\Middleware\WebRequestMonitoring::class);
-            $kernel->appendMiddlewareToGroup('api', \Inspector\Laravel\Middleware\WebRequestMonitoring::class);
-        }
-
         Gate::define('viewPulse', function (User $user) {
-            return $user->id == 1;
+            return $user->id === 1;
         });
 
         Paginator::useBootstrap();

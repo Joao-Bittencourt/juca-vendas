@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\JuridicalPerson;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

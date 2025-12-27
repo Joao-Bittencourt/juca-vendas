@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,6 +19,10 @@ class Transaction extends BaseModel
         'identifier',
         'due_date',
         'paid_date',
+    ];
+
+    protected array$cast = [
+        'amount' => 'float'
     ];
 
     public function paymentMethod(): BelongsTo

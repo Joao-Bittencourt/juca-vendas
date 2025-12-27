@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\Brand;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 

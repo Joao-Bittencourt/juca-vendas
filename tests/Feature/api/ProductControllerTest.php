@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\Product;
 
-uses(\Illuminate\Foundation\Testing\WithFaker::class);
+uses(Illuminate\Foundation\Testing\WithFaker::class);
 
 test('get list products success', function () {
     $loggedUser =  $this->loggedUser;

@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Sale;
 
-uses(\Illuminate\Foundation\Testing\WithFaker::class);
+uses(Illuminate\Foundation\Testing\WithFaker::class);
 
 test('list sales get request success', function () {
     $loggedUser =  $this->loggedUser;

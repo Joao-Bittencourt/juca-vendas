@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Http\Controllers\api\CustomerController;
 use App\Http\Controllers\api\ProductController;
 use App\Http\Controllers\BrandsController;

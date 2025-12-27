@@ -1,6 +1,8 @@
 <?php
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+declare(strict_types=1);
+
+uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 test('confirm password screen can be rendered', function () {
     $user =  $this->loggedUser;

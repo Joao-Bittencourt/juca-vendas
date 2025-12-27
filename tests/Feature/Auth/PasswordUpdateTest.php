@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Hash;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 test('password can be updated', function () {
     $user =  $this->loggedUser;

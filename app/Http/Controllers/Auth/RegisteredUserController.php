@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -37,10 +39,10 @@ class RegisteredUserController extends Controller
         ]);
 
         $superAdminDomain = config('app.super_admin_domain');
-        $superAdminDomainLength = strlen($superAdminDomain);
+        $superAdminDomainLength = mb_strlen($superAdminDomain);
         $superAdminDomainPosition =  $superAdminDomainLength * -1;
 
-        $role = substr($request->email, $superAdminDomainPosition) === config('app.super_admin_domain') ? 'super_admin' : config('app.default_role_on_registration');
+        $role = mb_substr($request->email, $superAdminDomainPosition) === config('app.super_admin_domain') ? 'super_admin' : config('app.default_role_on_registration');
 
         $user = User::create([
             'name' => $request->name,

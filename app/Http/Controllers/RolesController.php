@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RoleRequest;
@@ -7,22 +9,24 @@ use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class RolesController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('role.index', [
             'roles' => Role::paginate(Controller::DEFAULT_PAGE_SIZE)
         ]);
     }
 
-    public function create()
+    public function create(): View
     {
         return view('role.create');
     }
 
-    public function store(RoleRequest $request)
+    public function store(RoleRequest $request): RedirectResponse
     {
         $request->validated();
 
@@ -36,14 +40,14 @@ class RolesController extends Controller
             ->with(['alert-success' => __('Data saved successfully!')]);
     }
 
-    public function edit(Role $role)
+    public function edit(Role $role): View
     {
         return view('role.edit', [
             'role' => $role
         ]);
     }
 
-    public function update(RoleRequest $request, Role $role)
+    public function update(RoleRequest $request, Role $role): RedirectResponse
     {
         $request->validated();
 
@@ -56,7 +60,7 @@ class RolesController extends Controller
             ->with(['alert-success' => __('Data saved successfully!')]);
     }
 
-    public function addPermissionToRole($roleId)
+    public function addPermissionToRole(string|int $roleId): View
     {
         $permissions = Permission::get();
         $role = Role::findOrFail($roleId);
@@ -73,7 +77,7 @@ class RolesController extends Controller
         ]);
     }
 
-    public function givePermissionToRole(Request $request, $roleId)
+    public function givePermissionToRole(Request $request, string|int $roleId): RedirectResponse
     {
         $request->validate([
             'permission' => 'required'

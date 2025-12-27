@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\Customer;
 
-uses(\Illuminate\Foundation\Testing\WithFaker::class);
+uses(Illuminate\Foundation\Testing\WithFaker::class);
 
 test('list customers get request', function () {
     $loggedUser =  $this->loggedUser;

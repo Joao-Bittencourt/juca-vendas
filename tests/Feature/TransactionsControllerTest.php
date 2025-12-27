@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\PaymentMethod;
 use App\Models\Transaction;
 
-uses(\Illuminate\Foundation\Testing\WithFaker::class);
+uses(Illuminate\Foundation\Testing\WithFaker::class);
 
 test('list transactions get request success', function () {
     $loggedUser =  $this->loggedUser;
@@ -30,7 +32,7 @@ test('store credit transactions post success', function () {
     $transaction->installment_quantity = 1;
     $transaction->installments = [
         [
-            'amount' => number_format($transaction->amount, 2, '.', ''),
+            'amount' => $transaction->amount,
             'date' => $transaction->date
         ]
     ];
@@ -60,7 +62,7 @@ test('store debit transactions post success', function () {
 
     $transaction->installments = [
         [
-            'amount' => number_format($transaction->amount, 2, '.', ''),
+            'amount' => $transaction->amount,
             'date' => $transaction->date
         ]
     ];

@@ -1,21 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
 use App\Models\Product;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class ProductsController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('product.index', [
             'products' => Product::paginate(Controller::DEFAULT_PAGE_SIZE),
         ]);
     }
 
-    public function create()
+    public function create(): View
     {
         $brands = Brand::all()->where('active', 1);
 
@@ -24,7 +28,7 @@ class ProductsController extends Controller
         ]);
     }
 
-    public function store(ProductRequest $request)
+    public function store(ProductRequest $request): RedirectResponse
     {
         Product::create($request->validated());
 
@@ -33,7 +37,7 @@ class ProductsController extends Controller
             ->with(['alert-success' => __('Data saved successfully!')]);
     }
 
-    public function edit(Product $product)
+    public function edit(Product $product): View
     {
         $brands = Brand::all()->where('status', 1);
 
@@ -43,7 +47,7 @@ class ProductsController extends Controller
         ]);
     }
 
-    public function update(ProductRequest $request, Product $product)
+    public function update(ProductRequest $request, Product $product): RedirectResponse
     {
         $product->update($request->validated());
 
@@ -52,7 +56,7 @@ class ProductsController extends Controller
             ->with(['alert-success' => __('Data saved successfully!')]);
     }
 
-    public function activeDeactive(Product $product)
+    public function activeDeactive(Product $product): RedirectResponse
     {
         $product->active = !$product->active;
         $product->save();

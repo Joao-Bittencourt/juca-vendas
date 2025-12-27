@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -28,10 +30,10 @@ class Brand extends BaseModel
                 'icon' => 'fas fa-pencil-alt',
             ],
             [
-                'title' => $this->active == '1' ? __('Deactivate') : __('Activate'),
-                'class' => 'btn-' . ($this->active == '1' ? 'danger' : 'success'),
+                'title' => $this->active === '1' ? __('Deactivate') : __('Activate'),
+                'class' => 'btn-' . ($this->active === '1' ? 'danger' : 'success'),
                 'route' => route('brands.active_deactive', ['brand' => $this->id]),
-                'icon' => 'fas fa-' . ($this->active == '1' ? 'times' : 'check'),
+                'icon' => 'fas fa-' . ($this->active === '1' ? 'times' : 'check'),
             ],
         ];
 

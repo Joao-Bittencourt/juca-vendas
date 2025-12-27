@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 class PaymentMethod extends BaseModel
@@ -27,10 +29,10 @@ class PaymentMethod extends BaseModel
                 'icon' => 'fas fa-pencil-alt',
             ],
             [
-                'title' => $this->active == '1' ? __('Deactivate') : __('Activate'),
-                'class' => 'btn-' . ($this->active == '1' ? 'danger' : 'success'),
+                'title' => $this->active === '1' ? __('Deactivate') : __('Activate'),
+                'class' => 'btn-' . ($this->active === '1' ? 'danger' : 'success'),
                 'route' => route('payment-methods.active_deactive', ['paymentMethod' => $this->id]),
-                'icon' => 'fas fa-' . ($this->active == '1' ? 'times' : 'check'),
+                'icon' => 'fas fa-' . ($this->active === '1' ? 'times' : 'check'),
             ],
         ];
 

@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TransactionRequest;
 use App\Models\PaymentMethod;
 use App\Models\Transaction;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 
 class TransactionsController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('transaction.index', [
             'transactions' => Transaction::with('paymentMethod')->paginate(Controller::DEFAULT_PAGE_SIZE)
         ]);
     }
 
-    public function create()
+    public function create(): View
     {
         $paymentMethods = PaymentMethod::all()
             ->where('show_on_finance', 1)
@@ -28,7 +33,7 @@ class TransactionsController extends Controller
         ]);
     }
 
-    public function store(TransactionRequest $request)
+    public function store(TransactionRequest $request): RedirectResponse
     {
         $requestValidated = $request->validated();
         $transactionIdentifier = str()->uuid();
@@ -53,14 +58,14 @@ class TransactionsController extends Controller
             ->with(['alert-success' => __('Data saved successfully!')]);
     }
 
-    public function edit(Transaction $transaction)
+    public function edit(Transaction $transaction): View
     {
         return view('transaction.edit', [
             'transaction' => $transaction
         ]);
     }
 
-    public function update(TransactionRequest $request, Transaction $transaction)
+    public function update(TransactionRequest $request, Transaction $transaction): RedirectResponse
     {
         $transaction->update($request->validated());
 
@@ -69,7 +74,7 @@ class TransactionsController extends Controller
             ->with(['alert-success' => __('Data saved successfully!')]);
     }
 
-    public function activeDeactive(Transaction $transaction)
+    public function activeDeactive(Transaction $transaction): RedirectResponse
     {
         $transaction->active = !$transaction->active;
         $transaction->save();
@@ -78,7 +83,7 @@ class TransactionsController extends Controller
             ->with(['alert-success' => __('Data saved successfully!')]);
     }
 
-    public function transactionValidate(TransactionRequest $request)
+    public function transactionValidate(TransactionRequest $request): JsonResponse
     {
         $request->validated();
 

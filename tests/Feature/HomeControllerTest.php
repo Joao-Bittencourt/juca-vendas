@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 test('access home page get request', function () {
     $loggedUser =  $this->loggedUser;
 

@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\Role;
 
-uses(\Illuminate\Foundation\Testing\WithFaker::class);
+uses(Illuminate\Foundation\Testing\WithFaker::class);
 
 test('list roles get request success', function () {
     $loggedUser =  $this->loggedUser;

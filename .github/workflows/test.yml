@@ -46,9 +46,13 @@ jobs:
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
-      run: |
+      run: | 
         php artisan migrate --seed
-        vendor/bin/pest --coverage-clover=coverage.xml
+        if [[ "${{ matrix.php }}" == '8.2' ]]; then
+          composer test:unit-coverage
+        else
+          composer test
+        fi
 
     - name: Code Coverage Report
       if: success() && matrix.php == '8.2' 

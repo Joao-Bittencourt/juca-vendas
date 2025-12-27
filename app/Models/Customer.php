@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection;
 
 class Customer extends BaseModel
 {
@@ -16,12 +19,12 @@ class Customer extends BaseModel
         'updated_at',
     ];
 
-    protected $customerType = [
+    protected array$customerType = [
         'N' => 'Natural person',
         'J' => 'Juridical person',
     ];
 
-    public function getCustomerType($customerType): ?string
+    public function getCustomerType(string $customerType): ?string
     {
         return $this->customerType[$customerType] ?? null;
     }
@@ -41,7 +44,7 @@ class Customer extends BaseModel
         return $this->HasOne(JuridicalPerson::class);
     }
 
-    public function findListCustomers($q)
+    public function findListCustomers(string|int $q): Collection
     {
         return $this->where('name', 'like', '%' . $q . '%')->get();
     }
@@ -56,10 +59,10 @@ class Customer extends BaseModel
                 'icon' => 'fas fa-pencil-alt',
             ],
             [
-                'title' => $this->active == '1' ? __('Deactivate') : __('Activate') ,
-                'class' => 'btn-' . ($this->active == '1' ? 'danger' : 'success'),
+                'title' => $this->active === '1' ? __('Deactivate') : __('Activate') ,
+                'class' => 'btn-' . ($this->active === '1' ? 'danger' : 'success'),
                 'route' => route('customers.active_deactive', ['customer' => $this->id]),
-                'icon' => 'fas fa-' . ($this->active == '1' ? 'times' : 'check'),
+                'icon' => 'fas fa-' . ($this->active === '1' ? 'times' : 'check'),
             ],
         ];
 

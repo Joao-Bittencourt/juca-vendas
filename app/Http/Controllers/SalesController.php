@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SaleRequest;
@@ -7,17 +9,20 @@ use App\Models\PaymentMethod;
 use App\Models\Sale;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 
 class SalesController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('sale.index', [
             'sales' => Sale::with('customer', 'salesman')->paginate()
         ]);
     }
 
-    public function view(Sale $sale)
+    public function view(Sale $sale): View
     {
         $sale = Sale::with('customer', 'salesman', 'saleItems', 'saleItems.product')->where('id', (string) $sale->id)->first();
         return view('sale.view', [
@@ -25,7 +30,7 @@ class SalesController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(): View
     {
         $paymentMethods = PaymentMethod::all()
             ->where('show_on_store', 1)
@@ -38,7 +43,7 @@ class SalesController extends Controller
         ]);
     }
 
-    public function store(SaleRequest $request)
+    public function store(SaleRequest $request): RedirectResponse
     {
         $request->validated();
 
@@ -79,7 +84,7 @@ class SalesController extends Controller
             ->with(['alert-success' => __('Data saved successfully!')]);
     }
 
-    public function saleValidate(SaleRequest $request)
+    public function saleValidate(SaleRequest $request): JsonResponse
     {
         $request->validated();
 

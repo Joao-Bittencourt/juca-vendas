@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Collection;
 
 class Product extends BaseModel
 {
@@ -22,7 +25,7 @@ class Product extends BaseModel
         return $this->belongsTo(Brand::class);
     }
 
-    public function findListProducts(string $q)
+    public function findListProducts(string|int $q): Collection
     {
         return $this->where('name', 'like', "%{$q}%")
             ->orWhere('cod_product', 'like', "%{$q}%")
@@ -40,10 +43,10 @@ class Product extends BaseModel
                 'icon' => 'fas fa-pencil-alt',
             ],
             [
-                'title' => $this->active == '1' ? __('Deactivate') : __('Activate'),
-                'class' => 'btn-' . ($this->active == '1' ? 'danger' : 'success'),
+                'title' => $this->active === '1' ? __('Deactivate') : __('Activate'),
+                'class' => 'btn-' . ($this->active === '1' ? 'danger' : 'success'),
                 'route' => route('products.active_deactive', ['product' => $this->id]),
-                'icon' => 'fas fa-' . ($this->active == '1' ? 'times' : 'check'),
+                'icon' => 'fas fa-' . ($this->active === '1' ? 'times' : 'check'),
             ],
         ];
 

@@ -1,0 +1,50 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - master
+      
+jobs:
+  web-deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+     
+    steps:
+    - name: Get the latest code
+      uses: actions/checkout@v3
+    
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 8.2
+        tools: composer
+
+    - name: Install Dependencies back-end
+      run: |
+          composer install --optimize-autoloader --no-dev
+          npm install
+          npm run build
+                    
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USER }}
+        password: ${{ secrets.FTP_PASS }}
+        server-dir: ./domains/juca-vendas.x10.mx/public_html/
+        local-dir: ./
+        log-level: minimal
+        timeout: 90000
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/tests*
+          **/tests/**
+          **/docker/**
+          **/docker*
+          **/Dockerfile
+          **/docker-compose*
+          **/.env.*
+          **/phpunit.xml
+          **/node_modules
+          **/node_modules/**
